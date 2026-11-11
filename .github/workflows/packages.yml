@@ -53,15 +53,16 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Build package
         run: |
-          pacman -Syu --noconfirm --needed git sudo cmake ninja extra-cmake-modules qt6-base qt6-declarative qt6-wayland plasma-wayland-protocols
+          pacman -Syu --noconfirm --needed git sudo cmake ninja extra-cmake-modules qt6-base qt6-declarative qt6-wayland qt6-tools plasma-wayland-protocols libei zlib ki18n kconfig kcoreaddons kdbusaddons kglobalaccel kguiaddons kiconthemes kio knotifications prison kservice kstatusnotifieritem kwidgetsaddons kwindowsystem kxmlgui libplasma
           useradd -m builder
           printf 'builder ALL=(ALL) NOPASSWD: ALL\n' >> /etc/sudoers
           cp -a "$GITHUB_WORKSPACE" /tmp/klipboard
           cp /tmp/klipboard/packaging/arch/PKGBUILD /tmp/klipboard/PKGBUILD
           chown -R builder:builder /tmp/klipboard
           cd /tmp/klipboard
-          su builder -c 'makepkg --syncdeps --noconfirm'
+          su builder -c 'makepkg --nodeps --noconfirm'
           cp ./*.pkg.tar.zst "$GITHUB_WORKSPACE/"
+          pacman -U --noconfirm ./*.pkg.tar.zst
       - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08
         with:
           name: arch
