@@ -3,6 +3,7 @@
     SPDX-FileCopyrightText: 2014 Sebastian Kügler <sebas@kde.org>
 
     SPDX-License-Identifier: GPL-2.0-or-later
+    Modified by Klipboard contributors
 */
 
 pragma ComponentBehavior: Bound
@@ -11,7 +12,7 @@ import QtQuick
 
 import org.kde.plasma.components as PlasmaComponents3
 import org.kde.kirigami as Kirigami
-import org.kde.plasma.private.clipboard as Private // image provider
+import org.klipboard.private.clipboard as Private // image provider
 
 ClipboardItemDelegate {
     id: menuItem

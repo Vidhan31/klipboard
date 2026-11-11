@@ -3,7 +3,7 @@
 # Modified by Klipboard contributors
 
 ecm_add_qml_module(klipperplugin
-    URI org.kde.plasma.private.clipboard
+    URI org.klipboard.private.clipboard
     VERSION 0.1
     CLASS_NAME KlipperPlugin
     DEPENDENCIES

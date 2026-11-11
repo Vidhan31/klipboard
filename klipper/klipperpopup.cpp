@@ -38,7 +38,7 @@ KlipperPopup::KlipperPopup()
     // used only by screen readers
     setTitle(i18n("Clipboard Popup"));
 
-    QQmlComponent component(m_engine.get(), u"org.kde.plasma.private.clipboard", u"KlipperPopup");
+    QQmlComponent component(m_engine.get(), u"org.klipboard.private.clipboard", u"KlipperPopup");
 
     // Initialize in steps, so QML does not complain
     auto item = qobject_cast<QQuickItem *>(component.beginCreate(m_engine->rootContext()));

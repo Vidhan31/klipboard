@@ -47,7 +47,7 @@ You can run the built binary directly from the project directory for quick testi
 QML_IMPORT_PATH="$PWD/build/bin" ./build/bin/klipboard
 ```
 
-`QML_IMPORT_PATH` points Qt to the uninstalled QML module (`org.kde.plasma.private.clipboard`) located in `build/bin`. No binary symlinks are needed.
+`QML_IMPORT_PATH` points Qt to the uninstalled QML module (`org.klipboard.private.clipboard`) located in `build/bin`. No binary symlinks are needed.
 
 ## Running
 

@@ -10,8 +10,8 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 endif()
 
 set(PROJECT_DEP_VERSION "6.8.0")
-set(QT_MIN_VERSION "6.11.0")
-set(KF6_MIN_VERSION "6.30.0")
+set(QT_MIN_VERSION "6.9.0")
+set(KF6_MIN_VERSION "6.8.0")
 
 option(WITH_X11 "Build with X11 clipboard fallback support" ON)
 option(INSTALL_KCONF_UPDATE "Install legacy Plasma 6.3/6.8 kconf_update migration binaries" OFF)

@@ -2,6 +2,7 @@
     SPDX-FileCopyrightText: 2021 Bharadwaj Raju <bharadwaj.raju777@protonmail.com>
 
     SPDX-License-Identifier: GPL-2.0-or-later
+    Modified by Klipboard contributors
 */
 
 pragma ComponentBehavior: Bound
@@ -12,7 +13,7 @@ import QtQuick.Layouts
 import org.kde.plasma.components as PlasmaComponents3
 import org.kde.plasma.extras as PlasmaExtras
 import org.kde.kirigami as Kirigami
-import org.kde.plasma.private.clipboard as Private
+import org.klipboard.private.clipboard as Private
 
 ColumnLayout {
     id: editPage

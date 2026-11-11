@@ -2,6 +2,7 @@
      SPDX-FileCopyrightText: 2024 Fushan Wen <qydwhotmail@gmail.com>
 
      SPDX-License-Identifier: GPL-2.0-or-later
+     Modified by Klipboard contributors
  */
 
 #include <QDBusMetaType>
@@ -10,7 +11,7 @@
 
 #include "previewimageprovider.h"
 
-void qml_register_types_org_kde_plasma_private_clipboard();
+void qml_register_types_org_klipboard_private_clipboard();
 
 class KlipperPlugin : public QQmlEngineExtensionPlugin
 {
@@ -21,7 +22,7 @@ public:
     KlipperPlugin(QObject *parent = nullptr)
         : QQmlEngineExtensionPlugin(parent)
     {
-        volatile auto registration = &qml_register_types_org_kde_plasma_private_clipboard;
+        volatile auto registration = &qml_register_types_org_klipboard_private_clipboard;
         Q_UNUSED(registration);
     }
 

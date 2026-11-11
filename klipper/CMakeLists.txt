@@ -67,6 +67,7 @@ target_link_libraries(klipper "${LIBEI_LIBRARY}")
 set_target_properties(klipper PROPERTIES
                       VERSION ${PROJECT_VERSION}
                       SOVERSION ${PROJECT_VERSION_MAJOR})
+set_target_properties(klipper PROPERTIES OUTPUT_NAME klipboard)
 install(TARGETS klipper ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 add_subdirectory(declarative)

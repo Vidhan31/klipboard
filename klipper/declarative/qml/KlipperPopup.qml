@@ -12,7 +12,7 @@ import QtQuick.Controls as QQC
 import QtQuick.Window
 
 import org.kde.plasma.extras as PlasmaExtras
-import org.kde.plasma.private.clipboard as Private
+import org.klipboard.private.clipboard as Private
 import org.kde.kirigami as Kirigami
 
 PlasmaExtras.Representation {

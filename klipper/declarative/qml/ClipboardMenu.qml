@@ -20,7 +20,7 @@ import org.kde.plasma.components as PlasmaComponents3
 import org.kde.kitemmodels as KItemModels
 import org.kde.kirigami as Kirigami
 import org.kde.ksvg as KSvg
-import org.kde.plasma.private.clipboard as Private
+import org.klipboard.private.clipboard as Private
 
 PlasmaComponents3.ScrollView {
     id: clipboardMenu
