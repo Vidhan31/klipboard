@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: 2026 Klipboard contributors
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Modified by Klipboard contributors
+
+[Unit]
+Description=Klipboard Standalone Clipboard Manager
+PartOf=graphical-session.target
+After=plasma-core.target
+
+[Service]
+Type=dbus
+BusName=org.kde.klipper
+ExecStart=@KDE_INSTALL_FULL_BINDIR@/klipper
+Restart=on-failure
+RestartSec=1s
+Slice=session.slice
+TimeoutStopSec=10s
+
+[Install]
+WantedBy=plasma-workspace.target
+Alias=klipboard.service
