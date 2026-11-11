@@ -1,6 +1,7 @@
 /*
     SPDX-FileCopyrightText: 2026 Klipboard contributors
     SPDX-License-Identifier: GPL-2.0-or-later
+    Modified by Klipboard contributors
 */
 
 #include <csignal>
@@ -67,6 +68,7 @@ int main(int argc, char *argv[])
 
     KLocalizedString::setApplicationDomain(QByteArrayLiteral("klipper"));
 
+    // Keep the component name so KDBusService::Unique still arbitrates on org.kde.klipper.
     KAboutData aboutData(u"klipper"_s,
                          i18n("Klipboard"),
                          QStringLiteral(KLIPPER_VERSION_STRING),
@@ -76,7 +78,7 @@ int main(int argc, char *argv[])
     aboutData.setShortDescription(i18n("Standalone clipboard history manager"));
     aboutData.setOtherText(i18n("Klipboard is an independent project with no affiliation with the KDE project."));
     aboutData.setBugAddress(QByteArray());
-    aboutData.setDesktopFileName(u"org.kde.klipper"_s);
+    aboutData.setDesktopFileName(u"org.kde.klipboard"_s);
     KAboutData::setApplicationData(aboutData);
     app.setWindowIcon(QIcon::fromTheme(u"klipper"_s));
 
@@ -99,7 +101,7 @@ int main(int argc, char *argv[])
     });
 
     // System tray item (StatusNotifierItem -> kded6 StatusNotifierWatcher -> quickshell)
-    auto *sni = new KStatusNotifierItem(u"klipper"_s, klipper.get());
+    auto *sni = new KStatusNotifierItem(u"klipboard"_s, klipper.get());
     sni->setCategory(KStatusNotifierItem::SystemServices);
     sni->setStatus(KStatusNotifierItem::Active);
     sni->setIconByName(u"klipper-symbolic"_s);

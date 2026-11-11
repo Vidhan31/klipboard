@@ -2,7 +2,7 @@
 Type=Application
 Name=Klipboard
 Comment=Klipboard Standalone Clipboard Manager
-Exec=klipper
+Exec=klipboard
 Icon=klipper
 Terminal=false
 NoDisplay=true

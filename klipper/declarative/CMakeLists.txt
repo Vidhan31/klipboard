@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Fushan Wen <qydwhotmail@gmail.com>
 # SPDX-License-Identifier: BSD-3-Clause
+# Modified by Klipboard contributors
 
 ecm_add_qml_module(klipperplugin
     URI org.kde.plasma.private.clipboard
@@ -45,4 +46,4 @@ ecm_target_qml_sources(klipperplugin VERSION 0.1 SOURCES
     qml/HoverBlocker.qml
 )
 
-ecm_finalize_qml_module(klipperplugin)
+ecm_finalize_qml_module(klipperplugin DESTINATION "${KDE_INSTALL_QMLDIR}")

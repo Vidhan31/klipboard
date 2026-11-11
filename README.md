@@ -28,23 +28,23 @@ Building Klipboard requires:
 
 ## Build and installation
 
-Build and install into `$HOME/.local`:
+Configure for a standard `/usr` installation, then stage the install under a temporary root with `DESTDIR`:
 
 ```bash
-cmake -B build -G Ninja -DCMAKE_INSTALL_PREFIX="$HOME/.local" -DBUILD_TESTING=ON
+cmake -B build -G Ninja -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_TESTING=ON
 cmake --build build
 ctest --test-dir build --output-on-failure -R "klipper-testHistoryCycler|klipper-testHistoryModel|klipper-testUtils"
-cmake --install build
+DESTDIR="$HOME/klipboard-stage" cmake --install build
 ```
 
-The build installs the binary to `~/.local/bin/klipper`.
+This stages the installation at `$HOME/klipboard-stage/usr`. The binary path in a normal `/usr` installation is `/usr/bin/klipboard`.
 
 ### Running directly from the build directory (without installing)
 
-You can run the built binary directly from the project directory for quick testing without installing to `~/.local`:
+You can run the built binary directly from the project directory for quick testing without installing to `/usr`:
 
 ```bash
-QML_IMPORT_PATH="$PWD/build/bin" ./build/bin/klipper
+QML_IMPORT_PATH="$PWD/build/bin" ./build/bin/klipboard
 ```
 
 `QML_IMPORT_PATH` points Qt to the uninstalled QML module (`org.kde.plasma.private.clipboard`) located in `build/bin`. No binary symlinks are needed.
@@ -54,7 +54,7 @@ QML_IMPORT_PATH="$PWD/build/bin" ./build/bin/klipper
 Start Klipboard in the background:
 
 ```bash
-~/.local/bin/klipper &
+/usr/bin/klipboard &
 ```
 
 ### Autostart on login
@@ -63,10 +63,10 @@ Klipboard supports the XDG autostart specification. To install the autostart ent
 
 ```bash
 cmake -B build -DINSTALL_AUTOSTART=ON ...
-cmake --install build
+DESTDIR="$HOME/klipboard-stage" cmake --install build
 ```
 
-This installs `org.kde.klipper.desktop` into the XDG autostart directory (`~/.config/autostart` or `/etc/xdg/autostart`), allowing the desktop session to start Klipboard automatically on login.
+This stages `org.kde.klipboard.desktop` under `$HOME/klipboard-stage` at KDE's configured autostart directory. After packaging and installing to `/usr`, the desktop session can start Klipboard automatically on login.
 
 View service logs with journalctl:
 

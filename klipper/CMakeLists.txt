@@ -1,3 +1,4 @@
+# Modified by Klipboard contributors
 set(KLIPPER_VERSION_STRING ${PROJECT_VERSION})
 add_definitions(-DTRANSLATION_DOMAIN=\"klipper\")
 
@@ -61,10 +62,7 @@ if (HAVE_X11)
     target_link_libraries(klipper XCB::XCB XCB::AUX)
 endif()
 
-if (LIBEI_LIBRARY)
-    target_link_libraries(klipper ${LIBEI_LIBRARY})
-    target_compile_definitions(klipper PRIVATE HAVE_LIBEI=1)
-endif()
+target_link_libraries(klipper "${LIBEI_LIBRARY}")
 
 set_target_properties(klipper PROPERTIES
                       VERSION ${PROJECT_VERSION}
@@ -73,7 +71,7 @@ install(TARGETS klipper ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 add_subdirectory(declarative)
 
-install(FILES org.kde.klipper.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+install(FILES org.kde.klipboard.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 
 install(FILES klipper.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})
 

@@ -2,6 +2,7 @@
     SPDX-FileCopyrightText: 2026 Klipboard contributors
     SPDX-License-Identifier: GPL-2.0-or-later
 */
+// Modified by Klipboard contributors
 
 #include "clipboardpaste.h"
 
@@ -27,9 +28,7 @@
 #include "systemclipboard.h"
 #include "klipper_debug.h"
 
-#ifdef HAVE_LIBEI
 #include "libei.h"
-#endif
 
 std::shared_ptr<ClipboardPaste> ClipboardPaste::self()
 {
@@ -146,7 +145,6 @@ void ClipboardPaste::pasteToActiveWindow(const QString &uuid, bool shift)
 
 void ClipboardPaste::executePaste(const QString &keySeq, int delayMs)
 {
-#ifdef HAVE_LIBEI
     if (m_isPasting.exchange(true)) {
         qCDebug(KLIPPER_LOG) << "Paste operation already in progress, ignoring duplicate trigger";
         return;
@@ -298,5 +296,4 @@ void ClipboardPaste::executePaste(const QString &keySeq, int delayMs)
 
     connect(thread, &QThread::finished, thread, &QObject::deleteLater);
     thread->start();
-#endif
 }

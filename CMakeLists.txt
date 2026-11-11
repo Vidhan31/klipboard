@@ -4,6 +4,11 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(klipboard VERSION 6.8.2)
+
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "Install path prefix, prepended onto install directories" FORCE)
+endif()
+
 set(PROJECT_DEP_VERSION "6.8.0")
 set(QT_MIN_VERSION "6.11.0")
 set(KF6_MIN_VERSION "6.30.0")
@@ -70,26 +75,11 @@ find_package(PlasmaWaylandProtocols 1.22.0 REQUIRED)
 find_package(Wayland REQUIRED COMPONENTS Client)
 find_package(ZLIB REQUIRED)
 
-find_package(PkgConfig QUIET)
-if(PKG_CONFIG_FOUND)
-    pkg_check_modules(LIBEI IMPORTED_TARGET libei)
+find_library(LIBEI_LIBRARY NAMES ei libei.so.1 libei)
+if(NOT LIBEI_LIBRARY)
+    message(FATAL_ERROR "libei is required to build Klipboard")
 endif()
-
-if(TARGET PkgConfig::LIBEI)
-    set(LIBEI_LIBRARY PkgConfig::LIBEI)
-    set(HAVE_LIBEI 1)
-else()
-    find_library(LIBEI_LIBRARY NAMES ei libei.so.1 libei)
-    if(LIBEI_LIBRARY)
-        set(HAVE_LIBEI 1)
-    else()
-        set(HAVE_LIBEI 0)
-    endif()
-endif()
-
-if(HAVE_LIBEI)
-    message(STATUS "Found libei: ${LIBEI_LIBRARY}")
-endif()
+message(STATUS "Found required libei: ${LIBEI_LIBRARY}")
 
 if(WITH_X11)
     find_package(X11 REQUIRED)
@@ -111,7 +101,7 @@ add_subdirectory(klipper)
 add_subdirectory(src)
 
 if(INSTALL_AUTOSTART)
-    install(FILES packaging/autostart/org.kde.klipper.desktop
+    install(FILES packaging/autostart/org.kde.klipboard.desktop
             DESTINATION "${KDE_INSTALL_AUTOSTARTDIR}")
 endif()
 

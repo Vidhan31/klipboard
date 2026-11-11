@@ -1,15 +1,15 @@
 # SPDX-FileCopyrightText: 2026 Klipboard contributors
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-add_executable(klipper-bin main.cpp)
-set_target_properties(klipper-bin PROPERTIES OUTPUT_NAME klipper)
+add_executable(klipboard-bin main.cpp)
+set_target_properties(klipboard-bin PROPERTIES OUTPUT_NAME klipboard)
 
-target_compile_definitions(klipper-bin PRIVATE
+target_compile_definitions(klipboard-bin PRIVATE
     KLIPPER_VERSION_STRING="${PROJECT_VERSION}"
     KLIPPER_QML_IMPORT_DIR="${KDE_INSTALL_FULL_QMLDIR}"
 )
 
-target_link_libraries(klipper-bin
+target_link_libraries(klipboard-bin
     PRIVATE
         klipper
         Qt::Widgets
@@ -22,4 +22,4 @@ target_link_libraries(klipper-bin
         Plasma::PlasmaQuick
 )
 
-install(TARGETS klipper-bin ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS klipboard-bin ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
