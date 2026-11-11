@@ -7,6 +7,7 @@
 
 #include <QApplication>
 #include <QIcon>
+#include <QLibraryInfo>
 #include <QMenu>
 #include <QQmlEngine>
 
@@ -44,12 +45,20 @@ int main(int argc, char *argv[])
 {
     // Ensure Qt finds system Wayland/XCB platform plugins and KDE QML modules,
     // even if stale/partial Qt trees exist in ~/.local/plugins or ~/.local/qml
-    QCoreApplication::addLibraryPath(QStringLiteral("/usr/lib64/qt6/plugins"));
-    if (qEnvironmentVariableIsEmpty("QT_PLUGIN_PATH")) {
-        qputenv("QT_PLUGIN_PATH", "/usr/lib64/qt6/plugins");
+    const QString systemPluginPath = QLibraryInfo::path(QLibraryInfo::PluginsPath);
+    const QString systemQmlPath = QLibraryInfo::path(QLibraryInfo::QmlImportsPath);
+
+    if (!systemPluginPath.isEmpty()) {
+        QCoreApplication::addLibraryPath(systemPluginPath);
+        if (qEnvironmentVariableIsEmpty("QT_PLUGIN_PATH")) {
+            qputenv("QT_PLUGIN_PATH", systemPluginPath.toLocal8Bit());
+        }
     }
     if (qEnvironmentVariableIsEmpty("QML2_IMPORT_PATH")) {
-        qputenv("QML2_IMPORT_PATH", KLIPPER_QML_IMPORT_DIR ":/usr/lib64/qt6/qml");
+        const QString defaultQmlPath = systemQmlPath.isEmpty()
+            ? QStringLiteral(KLIPPER_QML_IMPORT_DIR)
+            : QStringLiteral(KLIPPER_QML_IMPORT_DIR ":") + systemQmlPath;
+        qputenv("QML2_IMPORT_PATH", defaultQmlPath.toLocal8Bit());
     }
 
     QApplication app(argc, argv);
@@ -74,10 +83,12 @@ int main(int argc, char *argv[])
     // Acquire unique org.kde.klipper ownership before instantiating Klipper or SQLite WAL
     KDBusService dbusService(KDBusService::Unique);
 
-    // Ensure patched standalone QML plugin takes precedence over /usr/lib64/qt6/qml
+    // Ensure patched standalone QML plugin takes precedence over system QML path
     if (const auto engine = PlasmaQuick::globalEngine()) {
         engine->addImportPath(QStringLiteral(KLIPPER_QML_IMPORT_DIR));
-        engine->addImportPath(QStringLiteral("/usr/lib64/qt6/qml"));
+        if (!systemQmlPath.isEmpty()) {
+            engine->addImportPath(systemQmlPath);
+        }
     }
 
     auto klipper = Klipper::self();
