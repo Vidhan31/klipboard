@@ -2,8 +2,6 @@ name: Linux packages
 
 on:
   pull_request:
-  push:
-    branches: ['**']
   workflow_dispatch:
 
 permissions:
@@ -12,12 +10,13 @@ permissions:
 jobs:
   deb:
     runs-on: ubuntu-24.04
+    container: invent-registry.kde.org/neon/docker-images/plasma:user
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Install build dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential debhelper cmake ninja-build extra-cmake-modules pkg-config qt6-base-dev qt6-base-private-dev qt6-declarative-dev qt6-wayland-dev libkf6config-dev libkf6coreaddons-dev libkf6dbusaddons-dev libkf6globalaccel-dev libkf6guiaddons-dev libkf6i18n-dev libkf6iconthemes-dev libkf6kio-dev libkf6notifications-dev libkf6prison-dev libkf6service-dev libkf6statusnotifieritem-dev libkf6widgetsaddons-dev libkf6windowsystem-dev libkf6xmlgui-dev libplasma-dev plasma-wayland-protocols libwayland-dev libxcb-xfixes0-dev libxcb-cursor-dev libei-dev zlib1g-dev dpkg-dev
+          apt-get update
+          apt-get install -y build-essential debhelper cmake ninja-build extra-cmake-modules pkg-config qt6-base-dev qt6-base-private-dev qt6-declarative-dev qt6-wayland-dev libkf6config-dev libkf6coreaddons-dev libkf6dbusaddons-dev libkf6globalaccel-dev libkf6guiaddons-dev libkf6i18n-dev libkf6iconthemes-dev libkf6kio-dev libkf6notifications-dev libkf6prison-dev libkf6service-dev libkf6statusnotifieritem-dev libkf6widgetsaddons-dev libkf6windowsystem-dev libkf6xmlgui-dev libplasma-dev plasma-wayland-protocols libwayland-dev libxcb-xfixes0-dev libxcb-cursor-dev libei-dev zlib1g-dev dpkg-dev
       - name: Build deb with debhelper
         run: |
           cp -a packaging/debian debian
@@ -38,14 +37,10 @@ jobs:
         run: dnf install -y cmake ninja-build extra-cmake-modules gcc-c++ qt6-qtbase-devel qt6-qtbase-private-devel qt6-qtdeclarative-devel qt6-qtwayland-devel kf6-kconfig-devel kf6-kcoreaddons-devel kf6-kdbusaddons-devel kf6-kglobalaccel-devel kf6-kguiaddons-devel kf6-ki18n-devel kf6-kiconthemes-devel kf6-kio-devel kf6-knotifications-devel kf6-prison-devel kf6-kservice-devel kf6-kstatusnotifieritem-devel kf6-kwidgetsaddons-devel kf6-kwindowsystem-devel kf6-kxmlgui-devel libplasma-devel plasma-wayland-protocols-devel wayland-devel libei-devel zlib-devel rpm-build
       - name: Build rpm
         run: |
-          version="${GITHUB_REF_NAME#v}"
-          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DINSTALL_AUTOSTART=OFF -DWITH_X11=ON
-          cmake --build build --parallel
-          DESTDIR="$PWD/stage" cmake --install build
           mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-          tar --exclude=.git -czf "rpmbuild/SOURCES/klipboard-${version}.tar.gz" .
-          rpmbuild --define "_topdir $PWD/rpmbuild" --define "version ${version}" -bb packaging/rpm/klipboard.spec
-          find rpmbuild/RPMS -name '*.rpm' -exec cp {} . \;
+          git archive --format=tar --prefix=klipboard-6.8.2/ HEAD | gzip > rpmbuild/SOURCES/klipboard-6.8.2.tar.gz
+          rpmbuild --define "_topdir $PWD/rpmbuild" -bb packaging/rpm/klipboard.spec
+          for rpm in rpmbuild/RPMS/*/*.rpm; do cp "$rpm" .; done
       - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08
         with:
           name: rpm
@@ -62,6 +57,7 @@ jobs:
           useradd -m builder
           printf 'builder ALL=(ALL) NOPASSWD: ALL\n' >> /etc/sudoers
           cp -a "$GITHUB_WORKSPACE" /tmp/klipboard
+          cp /tmp/klipboard/packaging/arch/PKGBUILD /tmp/klipboard/PKGBUILD
           chown -R builder:builder /tmp/klipboard
           cd /tmp/klipboard
           su builder -c 'makepkg --syncdeps --noconfirm'
