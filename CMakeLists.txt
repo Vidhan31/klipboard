@@ -34,7 +34,6 @@ ecm_set_disabled_deprecation_versions(
 )
 
 find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
-    Concurrent
     DBus
     Qml
     Quick
@@ -42,8 +41,6 @@ find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
     Widgets
     WaylandClient
 )
-find_package(Qt6GuiPrivate ${QT_MIN_VERSION} REQUIRED NO_MODULE)
-find_package(Qt6WaylandClientPrivate ${QT_MIN_VERSION} REQUIRED NO_MODULE)
 
 if(BUILD_TESTING)
     find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Test)
