@@ -23,5 +23,3 @@ target_link_libraries(klipper-bin
 )
 
 install(TARGETS klipper-bin ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-
-install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E create_symlink klipper \$ENV{DESTDIR}${KDE_INSTALL_FULL_BINDIR}/klipboard)")

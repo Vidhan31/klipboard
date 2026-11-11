@@ -37,22 +37,36 @@ ctest --test-dir build --output-on-failure -R "klipper-testHistoryCycler|klipper
 cmake --install build
 ```
 
-The build installs the binary to `~/.local/bin/klipper` with a `~/.local/bin/klipboard` symlink.
+The build installs the binary to `~/.local/bin/klipper`.
+
+### Running directly from the build directory (without installing)
+
+You can run the built binary directly from the project directory for quick testing without installing to `~/.local`:
+
+```bash
+QML_IMPORT_PATH="$PWD/build/bin" ./build/bin/klipper
+```
+
+`QML_IMPORT_PATH` points Qt to the uninstalled QML module (`org.kde.plasma.private.clipboard`) located in `build/bin`. No binary symlinks are needed.
 
 ## Running
 
-Start Klipboard directly in the background:
+Start Klipboard in the background:
 
 ```bash
-~/.local/bin/klipboard &
+~/.local/bin/klipper &
 ```
 
-Or enable and start the systemd user service:
+### Autostart on login
+
+Klipboard supports the XDG autostart specification. To install the autostart entry:
 
 ```bash
-systemctl --user daemon-reload
-systemctl --user enable --now klipboard.service
+cmake -B build -DINSTALL_AUTOSTART=ON ...
+cmake --install build
 ```
+
+This installs `org.kde.klipper.desktop` into the XDG autostart directory (`~/.config/autostart` or `/etc/xdg/autostart`), allowing the desktop session to start Klipboard automatically on login.
 
 View service logs with journalctl:
 

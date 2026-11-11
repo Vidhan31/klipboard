@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Klipboard
+Comment=Klipboard Standalone Clipboard Manager
+Exec=klipper
+Icon=klipper
+Terminal=false
+NoDisplay=true
+X-KDE-autostart-after=panel
+X-KDE-StartupNotify=false

@@ -10,7 +10,7 @@ set(KF6_MIN_VERSION "6.30.0")
 
 option(WITH_X11 "Build with X11 clipboard fallback support" ON)
 option(INSTALL_KCONF_UPDATE "Install legacy Plasma 6.3/6.8 kconf_update migration binaries" OFF)
-option(INSTALL_SYSTEMD_UNIT "Install systemd user service unit for standalone Klipboard" ON)
+option(INSTALL_AUTOSTART "Install XDG autostart desktop entry for end users" OFF)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -113,12 +113,9 @@ add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 add_subdirectory(klipper)
 add_subdirectory(src)
 
-if(INSTALL_SYSTEMD_UNIT)
-    configure_file(packaging/systemd/klipper.service.in ${CMAKE_CURRENT_BINARY_DIR}/klipper.service @ONLY)
-    configure_file(packaging/systemd/klipper.service.in ${CMAKE_CURRENT_BINARY_DIR}/klipboard.service @ONLY)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/klipper.service
-                  ${CMAKE_CURRENT_BINARY_DIR}/klipboard.service
-            DESTINATION "${KDE_INSTALL_SYSTEMDUSERUNITDIR}")
+if(INSTALL_AUTOSTART)
+    install(FILES packaging/autostart/org.kde.klipper.desktop
+            DESTINATION "${KDE_INSTALL_AUTOSTARTDIR}")
 endif()
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
