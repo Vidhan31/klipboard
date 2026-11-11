@@ -29,3 +29,4 @@ configuration, history format, shortcuts, and D-Bus interface.
 %{_libdir}/qt6/qml/org/klipboard/private/clipboard/
 %{_datadir}/applications/org.kde.klipboard.desktop
 %{_datadir}/config.kcfg/klipper.kcfg
+%{_datadir}/qlogging-categories6/klipper.categories
