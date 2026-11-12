@@ -64,7 +64,7 @@ jobs:
           cp /tmp/klipboard/packaging/arch/PKGBUILD /tmp/klipboard/PKGBUILD
           chown -R builder:builder /tmp/klipboard
           cd /tmp/klipboard
-          su builder -c 'makepkg --nodeps --noconfirm'
+          su builder -c 'makepkg --noconfirm'
           cp ./*.pkg.tar.zst "$GITHUB_WORKSPACE/"
           pacman -U --noconfirm ./*.pkg.tar.zst
       - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08

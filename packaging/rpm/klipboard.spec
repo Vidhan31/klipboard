@@ -22,10 +22,10 @@ configuration, history format, shortcuts, and D-Bus interface.
 %cmake_build
 %install
 %cmake_install
+rm -f %{buildroot}%{_libdir}/libklipboard.so
 %files
 %{_bindir}/klipboard
 %{_libdir}/libklipboard.so.6*
-%{_libdir}/libklipboard.so
 %{_libdir}/qt6/qml/org/klipboard/private/clipboard/
 %{_datadir}/applications/org.kde.klipboard.desktop
 %{_datadir}/config.kcfg/klipper.kcfg
