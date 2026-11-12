@@ -18,7 +18,7 @@ jobs:
       - name: Install build dependencies
         run: |
           apt-get update
-          apt-get install -y build-essential debhelper cmake ninja-build extra-cmake-modules pkg-config qt6-base-dev qt6-base-private-dev qt6-declarative-dev qt6-wayland-dev libkf6config-dev libkf6coreaddons-dev libkf6dbusaddons-dev libkf6globalaccel-dev libkf6guiaddons-dev libkf6i18n-dev libkf6iconthemes-dev libkf6kio-dev libkf6notifications-dev libkf6prison-dev libkf6service-dev kf6-kstatusnotifieritem-dev libkf6widgetsaddons-dev libkf6windowsystem-dev libkf6xmlgui-dev libplasma-dev plasma-wayland-protocols libwayland-dev libxcb-xfixes0-dev libxcb-cursor-dev libei-dev zlib1g-dev dpkg-dev
+          apt-get install -y build-essential debhelper dh-sequence-qmldeps cmake ninja-build extra-cmake-modules pkg-config qt6-base-dev qt6-base-private-dev qt6-declarative-dev qt6-wayland-dev libkf6config-dev libkf6coreaddons-dev libkf6dbusaddons-dev libkf6globalaccel-dev libkf6guiaddons-dev libkf6i18n-dev libkf6iconthemes-dev libkf6kio-dev libkf6notifications-dev libkf6prison-dev libkf6service-dev kf6-kstatusnotifieritem-dev libkf6widgetsaddons-dev libkf6windowsystem-dev libkf6xmlgui-dev libplasma-dev plasma-wayland-protocols libwayland-dev libxcb-xfixes0-dev libxcb-cursor-dev libei-dev zlib1g-dev dpkg-dev
       - name: Build deb with debhelper
         run: |
           cp -a packaging/debian debian
@@ -40,7 +40,7 @@ jobs:
       - name: Build rpm
         run: |
           mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-          git archive --format=tar --prefix=klipboard-6.8.2/ HEAD | gzip -n > rpmbuild/SOURCES/klipboard-6.8.2.tar.gz
+          tar --sort=name --mtime='@0' --owner=0 --group=0 --numeric-owner --exclude=./rpmbuild --transform='s,^\./,klipboard-6.8.2/,' -czf rpmbuild/SOURCES/klipboard-6.8.2.tar.gz .
           rpmbuild --define "_topdir $PWD/rpmbuild" -bb packaging/rpm/klipboard.spec
           for rpm in rpmbuild/RPMS/*/*.rpm; do cp "$rpm" .; done
       - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Build package
         run: |
-          pacman -Syu --noconfirm --needed git sudo cmake ninja extra-cmake-modules qt6-base qt6-declarative qt6-wayland qt6-tools plasma-wayland-protocols libei libxcb xcb-util xcb-util-cursor xcb-util-xfixes zlib ki18n kconfig kcoreaddons kdbusaddons kglobalaccel kguiaddons kiconthemes kio knotifications prison kservice kstatusnotifieritem kwidgetsaddons kwindowsystem kxmlgui libplasma
+          pacman -Syu --noconfirm --needed git sudo cmake ninja extra-cmake-modules qt6-base qt6-declarative qt6-wayland qt6-tools plasma-wayland-protocols libei libxcb xcb-util zlib ki18n kconfig kcoreaddons kdbusaddons kglobalaccel kguiaddons kiconthemes kio knotifications prison kservice kstatusnotifieritem kwidgetsaddons kwindowsystem kxmlgui libplasma
           useradd -m builder
           printf 'builder ALL=(ALL) NOPASSWD: ALL\n' >> /etc/sudoers
           cp -a "$GITHUB_WORKSPACE" /tmp/klipboard
