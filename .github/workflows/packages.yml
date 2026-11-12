@@ -18,7 +18,7 @@ jobs:
       - name: Install build dependencies
         run: |
           apt-get update
-          apt-get install -y build-essential debhelper dh-sequence-qmldeps cmake ninja-build extra-cmake-modules pkg-config qt6-base-dev qt6-base-private-dev qt6-declarative-dev qt6-wayland-dev libkf6config-dev libkf6coreaddons-dev libkf6dbusaddons-dev libkf6globalaccel-dev libkf6guiaddons-dev libkf6i18n-dev libkf6iconthemes-dev libkf6kio-dev libkf6notifications-dev libkf6prison-dev libkf6service-dev kf6-kstatusnotifieritem-dev libkf6widgetsaddons-dev libkf6windowsystem-dev libkf6xmlgui-dev libplasma-dev plasma-wayland-protocols libwayland-dev libxcb-xfixes0-dev libxcb-cursor-dev libei-dev zlib1g-dev dpkg-dev
+          apt-get install -y build-essential debhelper pkg-kde-tools cmake ninja-build extra-cmake-modules pkg-config qt6-base-dev qt6-base-private-dev qt6-declarative-dev qt6-wayland-dev libkf6config-dev libkf6coreaddons-dev libkf6dbusaddons-dev libkf6globalaccel-dev libkf6guiaddons-dev libkf6i18n-dev libkf6iconthemes-dev libkf6kio-dev libkf6notifications-dev libkf6prison-dev libkf6service-dev kf6-kstatusnotifieritem-dev libkf6widgetsaddons-dev libkf6windowsystem-dev libkf6xmlgui-dev libplasma-dev plasma-wayland-protocols libwayland-dev libxcb-xfixes0-dev libxcb-cursor-dev libei-dev zlib1g-dev dpkg-dev
       - name: Build deb with debhelper
         run: |
           cp -a packaging/debian debian
