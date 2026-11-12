@@ -8,10 +8,10 @@ license=('GPL-2.0-or-later' 'BSD-3-Clause')
 depends=('qt6-base' 'qt6-declarative' 'qt6-wayland' 'ki18n' 'kconfig' 'kcoreaddons' 'kdbusaddons' 'kglobalaccel' 'kguiaddons' 'kiconthemes' 'kio' 'knotifications' 'prison' 'kservice' 'kstatusnotifieritem' 'kwidgetsaddons' 'kwindowsystem' 'kxmlgui' 'libplasma' 'wayland' 'libei' 'zlib')
 makedepends=('cmake' 'ninja' 'extra-cmake-modules' 'qt6-tools' 'plasma-wayland-protocols')
 _commit=0862affe2354045ca3d43090e55fd7ae7409fafc
-source=("git+https://github.com/Vidhan31/klipboard.git#commit=$_commit")
-sha256sums=('SKIP')
+source=("$pkgname-$pkgver.tar.gz::https://codeload.github.com/Vidhan31/klipboard/tar.gz/$_commit")
+sha256sums=('e8607afbb5011a93bf659188fb6a0ad08a26f7b3a6fd74a12032e724b5fb9ebc')
 build() {
-  cmake -S "$srcdir/klipboard" -B build -G Ninja -DCMAKE_INSTALL_PREFIX=/usr -DINSTALL_AUTOSTART=OFF -DINSTALL_KCONF_UPDATE=OFF -DWITH_X11=ON
+  cmake -S "$srcdir/$pkgname-$pkgver" -B build -G Ninja -DCMAKE_INSTALL_PREFIX=/usr -DINSTALL_AUTOSTART=OFF -DINSTALL_KCONF_UPDATE=OFF -DWITH_X11=ON
   cmake --build build
 }
 package() { DESTDIR="$pkgdir" cmake --install build; }
