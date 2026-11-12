@@ -40,9 +40,7 @@ jobs:
       - name: Build rpm
         run: |
           mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-          mkdir -p /tmp/rpm-source/klipboard-6.8.2
-          tar --exclude=./build --exclude=./rpmbuild --exclude=./.git -cf - . | tar -xf - -C /tmp/rpm-source/klipboard-6.8.2
-          tar -czf rpmbuild/SOURCES/klipboard-6.8.2.tar.gz -C /tmp/rpm-source klipboard-6.8.2
+          git archive --format=tar --prefix=klipboard-6.8.2/ HEAD | gzip -n > rpmbuild/SOURCES/klipboard-6.8.2.tar.gz
           rpmbuild --define "_topdir $PWD/rpmbuild" -bb packaging/rpm/klipboard.spec
           for rpm in rpmbuild/RPMS/*/*.rpm; do cp "$rpm" .; done
       - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08
@@ -57,7 +55,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Build package
         run: |
-          pacman -Syu --noconfirm --needed git sudo cmake ninja extra-cmake-modules qt6-base qt6-declarative qt6-wayland qt6-tools plasma-wayland-protocols libei zlib ki18n kconfig kcoreaddons kdbusaddons kglobalaccel kguiaddons kiconthemes kio knotifications prison kservice kstatusnotifieritem kwidgetsaddons kwindowsystem kxmlgui libplasma
+          pacman -Syu --noconfirm --needed git sudo cmake ninja extra-cmake-modules qt6-base qt6-declarative qt6-wayland qt6-tools plasma-wayland-protocols libei libxcb xcb-util xcb-util-cursor xcb-util-xfixes zlib ki18n kconfig kcoreaddons kdbusaddons kglobalaccel kguiaddons kiconthemes kio knotifications prison kservice kstatusnotifieritem kwidgetsaddons kwindowsystem kxmlgui libplasma
           useradd -m builder
           printf 'builder ALL=(ALL) NOPASSWD: ALL\n' >> /etc/sudoers
           cp -a "$GITHUB_WORKSPACE" /tmp/klipboard

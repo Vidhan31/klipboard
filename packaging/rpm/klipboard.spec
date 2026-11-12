@@ -25,6 +25,7 @@ configuration, history format, shortcuts, and D-Bus interface.
 rm -f %{buildroot}%{_libdir}/libklipboard.so
 %files
 %{_bindir}/klipboard
+%license LICENSE packaging/debian/copyright
 %{_libdir}/libklipboard.so.6*
 %{_libdir}/qt6/qml/org/klipboard/private/clipboard/
 %{_datadir}/applications/org.kde.klipboard.desktop

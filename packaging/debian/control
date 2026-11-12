@@ -2,7 +2,7 @@ Source: klipboard
 Section: utils
 Priority: optional
 Maintainer: Klipboard contributors <noreply@example.invalid>
-Build-Depends: debhelper-compat (= 13), cmake, ninja-build, extra-cmake-modules, pkg-config,
+Build-Depends: debhelper-compat (= 13), dh-sequence-qmldeps, cmake, ninja-build, extra-cmake-modules, pkg-config,
  qt6-base-dev, qt6-base-private-dev, qt6-declarative-dev, qt6-wayland-dev,
  libkf6config-dev, libkf6coreaddons-dev, libkf6dbusaddons-dev, libkf6globalaccel-dev,
  libkf6guiaddons-dev, libkf6i18n-dev, libkf6iconthemes-dev, libkf6kio-dev,
@@ -14,7 +14,7 @@ Rules-Requires-Root: no
 
 Package: klipboard
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, qml-module-org-kde-kirigami, qml-module-org-kde-kitemmodels, qml-module-org-kde-kquickcontrolsaddons, qml-module-org-kde-ksvg
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${qml6:Depends}, qml-module-org-kde-kirigami, qml-module-org-kde-kitemmodels, qml-module-org-kde-kquickcontrolsaddons, qml-module-org-kde-ksvg
 Description: Standalone clipboard manager based on KDE Klipper
  Klipboard runs independently of plasmashell while retaining Klipper's
  configuration, history format, shortcuts, and D-Bus interface.
