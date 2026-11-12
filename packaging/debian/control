@@ -2,7 +2,7 @@ Source: klipboard
 Section: utils
 Priority: optional
 Maintainer: Klipboard contributors <noreply@example.invalid>
-Build-Depends: debhelper-compat (= 13), dh-sequence-qmldeps, cmake, ninja-build, extra-cmake-modules, pkg-config,
+Build-Depends: debhelper-compat (= 13), pkg-kde-tools, cmake, ninja-build, extra-cmake-modules, pkg-config,
  qt6-base-dev, qt6-base-private-dev, qt6-declarative-dev, qt6-wayland-dev,
  libkf6config-dev, libkf6coreaddons-dev, libkf6dbusaddons-dev, libkf6globalaccel-dev,
  libkf6guiaddons-dev, libkf6i18n-dev, libkf6iconthemes-dev, libkf6kio-dev,
