@@ -4,6 +4,3 @@
 
 override_dh_auto_configure:
 	dh_auto_configure -- -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_TESTING=OFF -DINSTALL_AUTOSTART=OFF -DINSTALL_KCONF_UPDATE=OFF -DWITH_X11=ON
-
-execute_after_dh_shlibdeps:
-	dh_qmldeps
