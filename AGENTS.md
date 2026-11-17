@@ -70,7 +70,7 @@ ctest --test-dir build --output-on-failure -R "klipper-testHistoryCycler|klipper
 
 ## Running Klipboard
 
-Stop CopyQ or any existing clipboard managers (including an installed release `klipboard` binary):
+Stop CopyQ or any existing clipboard managers (including an installed release `klipboard` binary) if running:
 
 ```bash
 copyq exit 2>/dev/null || true
