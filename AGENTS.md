@@ -19,7 +19,7 @@ The application runs without `plasmashell`, uses its own lifecycle, and preserve
 ### Do not do
 
 - Do not enable, start, or depend on `plasmashell`.
-- Do not run CopyQ and Klipboard at the same time. Both monitor the Wayland clipboard and contest the primary selection.
+- Do not run CopyQ or any other clipboard manager (including an installed release `klipboard` binary) at the same time. They contest the Wayland clipboard and primary selection.
 - Do not install to `/usr` or run `cmake --install`. Do not install to the system; run directly from the build directory.
 - Do not change the configuration filename (`klipperrc`) or schema.
 - Do not modify or replace the SQLite database schema (`history3.sqlite` version 3 with WAL mode) or binary storage format in `data/`.
@@ -70,10 +70,11 @@ ctest --test-dir build --output-on-failure -R "klipper-testHistoryCycler|klipper
 
 ## Running Klipboard
 
-Stop CopyQ if running:
+Stop CopyQ or any existing clipboard managers (including an installed release `klipboard` binary):
 
 ```bash
-copyq exit
+copyq exit 2>/dev/null || true
+pkill -x klipboard || true
 ```
 
 Run directly from the build tree:
