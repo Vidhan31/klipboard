@@ -34,6 +34,11 @@ public:
     void pasteToActiveWindow(const QString &uuid = QString(), bool shift = false);
 
 private:
+    /**
+     * Executes the paste keystroke injection via KWin's private EIS RemoteDesktop D-Bus interface.
+     * Establishes a libei sender context with connectToEIS(), transmits the key sequence, and
+     * explicitly disconnects the returned cookie via disconnect(cookie) upon completion or error.
+     */
     void executePaste(const QString &keySeq, int delayMs);
 
     std::atomic<bool> m_isPasting{false};

@@ -153,6 +153,30 @@ void ClipboardPaste::executePaste(const QString &keySeq, int delayMs)
     }
 
     auto *thread = QThread::create([this, keySeq, delayMs]() {
+        struct PasteStateGuard {
+            std::atomic<bool> &flag;
+            ~PasteStateGuard()
+            {
+                flag = false;
+            }
+        } pasteGuard{m_isPasting};
+
+        struct EisCleanupGuard {
+            int cookie = 0;
+            ~EisCleanupGuard()
+            {
+                if (cookie != 0) {
+                    qCDebug(KLIPPER_LOG) << "Disconnecting KWin EIS context for cookie:" << cookie;
+                    auto disconnectMsg = QDBusMessage::createMethodCall(QStringLiteral("org.kde.KWin"),
+                                                                        QStringLiteral("/org/kde/KWin/EIS/RemoteDesktop"),
+                                                                        QStringLiteral("org.kde.KWin.EIS.RemoteDesktop"),
+                                                                        QStringLiteral("disconnect"));
+                    disconnectMsg << cookie;
+                    QDBusConnection::sessionBus().send(disconnectMsg);
+                }
+            }
+        } eisGuard;
+
         if (delayMs > 0) {
             std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
         }
@@ -166,21 +190,20 @@ void ClipboardPaste::executePaste(const QString &keySeq, int delayMs)
         QDBusMessage reply = QDBusConnection::sessionBus().call(msg);
         if (reply.type() == QDBusMessage::ErrorMessage) {
             qCWarning(KLIPPER_LOG) << "KWin connectToEIS failed:" << reply.errorMessage();
-            m_isPasting = false;
             return;
         }
 
         const QList<QVariant> args = reply.arguments();
         if (args.count() < 2) {
             qCWarning(KLIPPER_LOG) << "connectToEIS returned unexpected argument count:" << args.count();
-            m_isPasting = false;
             return;
         }
 
         auto fdWrapper = qvariant_cast<QDBusUnixFileDescriptor>(args.at(0));
+        eisGuard.cookie = args.at(1).toInt();
+
         if (!fdWrapper.isValid()) {
             qCWarning(KLIPPER_LOG) << "connectToEIS returned invalid file descriptor";
-            m_isPasting = false;
             return;
         }
 
@@ -188,7 +211,6 @@ void ClipboardPaste::executePaste(const QString &keySeq, int delayMs)
         int fd = ::dup(rawFd);
         if (fd < 0) {
             qCWarning(KLIPPER_LOG) << "Failed to dup KWin EIS socket fd:" << strerror(errno);
-            m_isPasting = false;
             return;
         }
 
@@ -196,7 +218,6 @@ void ClipboardPaste::executePaste(const QString &keySeq, int delayMs)
         if (!ei) {
             qCWarning(KLIPPER_LOG) << "Failed to create libei sender context";
             ::close(fd);
-            m_isPasting = false;
             return;
         }
 
@@ -206,7 +227,6 @@ void ClipboardPaste::executePaste(const QString &keySeq, int delayMs)
             qCWarning(KLIPPER_LOG) << "ei_setup_backend_fd failed:" << strerror(-ret);
             ei_unref(ei);
             ::close(fd);
-            m_isPasting = false;
             return;
         }
 
@@ -293,7 +313,6 @@ void ClipboardPaste::executePaste(const QString &keySeq, int delayMs)
         }
         ei_unref(ei);
         ::close(fd);
-        m_isPasting = false;
     });
 
     connect(thread, &QThread::finished, thread, &QObject::deleteLater);

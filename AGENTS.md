@@ -35,6 +35,7 @@ The application runs without `plasmashell`, uses its own lifecycle, and preserve
 - Keep `KDBusService::Unique` in `src/main.cpp` so subsequent launches activate the existing instance.
 - Keep `KSignalHandler` handling `SIGTERM`, `SIGINT`, and `SIGHUP` to run `saveSession()` and `saveClipboardHistory()` before exit.
 - Keep license attribution intact. Upstream files modified for Klipboard must include a modification notice comment (`Modified by Klipboard contributors`) below their license header.
+- Explicitly disconnect KWin EIS contexts via `org.kde.KWin.EIS.RemoteDesktop.disconnect(cookie)` when paste injection finishes or aborts in `ClipboardPaste`. Otherwise, unused EIS contexts accumulate in KWin until Klipboard exits.
 
 ## Repository layout
 
@@ -65,8 +66,12 @@ Configure, build, and test:
 ```bash
 cmake -B build -G Ninja -DBUILD_TESTING=ON
 cmake --build build
-ctest --test-dir build --output-on-failure -R "klipper-testHistoryCycler|klipper-testHistoryModel|klipper-testUtils"
+ctest --test-dir build --output-on-failure -R "klipper-testHistoryCycler|klipper-testHistoryModel|klipper-testUtils|klipper-testClipboardPaste"
 ```
+
+> **Note on test targets**: Always use the `-R` filter above. Avoid running unfiltered `ctest`:
+> - `klippertest` is an upstream legacy test where `testBug465225` executes `KIO::copy()`, which spawns `/usr/libexec/kf6/kioworker` and hangs indefinitely without full Plasma session KIO worker infrastructure.
+> - `klipper_v3migrationtest` expects the legacy `plasma6.3-update-clipboard-database-2-to-3` binary, which is disabled by default in standalone builds (`INSTALL_KCONF_UPDATE=OFF`).
 
 ## Running Klipboard
 
