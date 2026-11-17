@@ -45,7 +45,9 @@ ClipboardPaste::~ClipboardPaste() = default;
 
 void ClipboardPaste::pasteToActiveWindow(const QString &uuid, bool shift)
 {
-    KConfigGroup group = KSharedConfig::openConfig(QStringLiteral("klipperrc"))->group(QStringLiteral("General"));
+    auto config = KSharedConfig::openConfig(QStringLiteral("klipperrc"));
+    config->reparseConfiguration();
+    KConfigGroup group = config->group(QStringLiteral("General"));
     const bool autoPaste = group.readEntry("AutoPasteOnSelect", true);
     if (!autoPaste) {
         qCDebug(KLIPPER_LOG) << "AutoPasteOnSelect is disabled in klipperrc";

@@ -3,6 +3,7 @@
     SPDX-FileCopyrightText: 2008 Dmitry Suzdalev <dimsuz@gmail.com>
 
     SPDX-License-Identifier: GPL-2.0-or-later
+    Modified by Klipboard contributors
 */
 #pragma once
 
@@ -16,6 +17,7 @@ class KShortcutsEditor;
 class Klipper;
 class KActionCollection;
 class QCheckBox;
+class QComboBox;
 class QSpinBox;
 class QTreeWidgetItem;
 class QLabel;
@@ -37,6 +39,9 @@ private:
     QCheckBox *m_saveImagesCb;
 
     QSpinBox *m_historySizeSb;
+
+    QComboBox *m_pasteKeySequenceCb;
+    QComboBox *m_terminalPasteKeySequenceCb;
 };
 
 class PopupWidget : public QWidget

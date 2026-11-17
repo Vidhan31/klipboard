@@ -9,6 +9,7 @@
 #include "configdialog.h"
 
 #include <QCheckBox>
+#include <QComboBox>
 #include <QFontDatabase>
 #include <QFormLayout>
 #include <QGridLayout>
@@ -154,6 +155,29 @@ GeneralWidget::GeneralWidget(QWidget *parent)
                                   "Any application that sends both text and image will also ignore it."),
                            imageHint);
     });
+
+    layout->addRow(QString(), new QLabel(this));
+
+    const QStringList pasteShortcuts = {
+        QStringLiteral("Ctrl+V"),
+        QStringLiteral("Ctrl+Shift+V"),
+    };
+
+    // Paste shortcuts
+    const KConfigSkeletonItem *pasteItem = KlipperSettings::self()->pasteKeySequenceItem();
+    m_pasteKeySequenceCb = new QComboBox(this);
+    m_pasteKeySequenceCb->setObjectName(QLatin1String("kcfg_PasteKeySequence"));
+    m_pasteKeySequenceCb->addItems(pasteShortcuts);
+    layout->addRow(pasteItem->label(), m_pasteKeySequenceCb);
+
+    const KConfigSkeletonItem *terminalItem = KlipperSettings::self()->terminalPasteKeySequenceItem();
+    m_terminalPasteKeySequenceCb = new QComboBox(this);
+    m_terminalPasteKeySequenceCb->setObjectName(QLatin1String("kcfg_TerminalPasteKeySequence"));
+    m_terminalPasteKeySequenceCb->addItems(pasteShortcuts);
+    layout->addRow(terminalItem->label(), m_terminalPasteKeySequenceCb);
+
+    QLabel *pasteHint = ConfigDialog::createHintLabel(i18n("Choose the key sequence injected into the active window when selecting an entry from clipboard history. Hold Shift while selecting an entry or press Shift+Enter to use the terminal paste shortcut."), this);
+    layout->addRow(QString(), pasteHint);
 }
 
 //////////////////////////

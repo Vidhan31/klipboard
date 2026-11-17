@@ -65,6 +65,16 @@
     <entry name="ActionsInfoMessageShown" type="Bool">
         <default>true</default>
     </entry>
+    <entry name="PasteKeySequence" type="String">
+      <label>Paste shortcut:</label>
+      <default>Ctrl+V</default>
+      <whatsthis>Key sequence injected into the active window when an item is selected from clipboard history.</whatsthis>
+    </entry>
+    <entry name="TerminalPasteKeySequence" type="String">
+      <label>Terminal / Shift paste shortcut:</label>
+      <default>Ctrl+Shift+V</default>
+      <whatsthis>Key sequence injected into the active window when an item is selected with Shift pressed.</whatsthis>
+    </entry>
   </group>
 
   <group name="Actions">

@@ -5,6 +5,7 @@
 
 #include "../clipboardpaste.h"
 #include "../klipper.h"
+#include "../klippersettings.h"
 
 #include <QSignalSpy>
 #include <QTest>
@@ -21,6 +22,7 @@ private Q_SLOTS:
     void testDisabledAutoPaste();
     void testPasteTrigger();
     void testPasteWithUuid();
+    void testPasteShortcutConfig();
 };
 
 void ClipboardPasteTest::initTestCase()
@@ -72,6 +74,43 @@ void ClipboardPasteTest::testPasteWithUuid()
 
     ClipboardPaste::self()->pasteToActiveWindow(QString(), true);
     QTest::qWait(250);
+}
+
+void ClipboardPasteTest::testPasteShortcutConfig()
+{
+    auto config = KSharedConfig::openConfig(QStringLiteral("klipperrc"));
+    KConfigGroup group = config->group(QStringLiteral("General"));
+
+    // Test configured values
+    group.writeEntry("PasteKeySequence", QStringLiteral("Ctrl+Shift+V"));
+    group.writeEntry("TerminalPasteKeySequence", QStringLiteral("Ctrl+V"));
+    group.sync();
+
+    config->reparseConfiguration();
+    QCOMPARE(group.readEntry("PasteKeySequence", QStringLiteral("Ctrl+V")), QStringLiteral("Ctrl+Shift+V"));
+    QCOMPARE(group.readEntry("TerminalPasteKeySequence", QStringLiteral("Ctrl+Shift+V")), QStringLiteral("Ctrl+V"));
+
+    ClipboardPaste::self()->pasteToActiveWindow(QString(), false);
+    QTest::qWait(250);
+    ClipboardPaste::self()->pasteToActiveWindow(QString(), true);
+    QTest::qWait(250);
+
+    // Test setting both to same shortcut
+    group.writeEntry("PasteKeySequence", QStringLiteral("Ctrl+Shift+V"));
+    group.writeEntry("TerminalPasteKeySequence", QStringLiteral("Ctrl+Shift+V"));
+    group.sync();
+    config->reparseConfiguration();
+
+    ClipboardPaste::self()->pasteToActiveWindow(QString(), false);
+    QTest::qWait(250);
+    ClipboardPaste::self()->pasteToActiveWindow(QString(), true);
+    QTest::qWait(250);
+
+    // Restore defaults
+    group.writeEntry("PasteKeySequence", QStringLiteral("Ctrl+V"));
+    group.writeEntry("TerminalPasteKeySequence", QStringLiteral("Ctrl+Shift+V"));
+    group.sync();
+    config->reparseConfiguration();
 }
 
 QTEST_MAIN(ClipboardPasteTest)

@@ -44,7 +44,7 @@ sudo pacman -U ./klipboard-*-x86_64.pkg.tar.zst
 
 Press Meta+V to open clipboard history. Select an item to paste it into the active window. Hold Shift while clicking an item or press Shift+Enter to use the terminal paste shortcut. Change global shortcuts in Klipboard's settings.
 
-On Wayland, Klipboard puts the selected item on the clipboard and asks KWin to send paste keys to the active application. Text uses Ctrl+V by default. Shift-click and Shift+Enter use Ctrl+Shift+V. Images always use Ctrl+V.
+On Wayland, Klipboard puts the selected item on the clipboard and asks KWin to send paste keys to the active application. Text uses Ctrl+V by default. Shift-click and Shift+Enter use Ctrl+Shift+V. Images always use Ctrl+V. Both the standard and terminal paste shortcuts can be configured between Ctrl+V and Ctrl+Shift+V in Klipboard's settings under the General tab.
 
 To start Klipboard when you log in, add it under System Settings > Autostart. If you add it as a command, enter `klipboard`. Klipboard's desktop entry is hidden from application menus, so it may not appear in the application picker.
 
