@@ -20,7 +20,7 @@ The application runs without `plasmashell`, uses its own lifecycle, and preserve
 
 - Do not enable, start, or depend on `plasmashell`.
 - Do not run CopyQ and Klipboard at the same time. Both monitor the Wayland clipboard and contest the primary selection.
-- Do not install to `/usr`. Always install to `$HOME/.local` (`-DCMAKE_INSTALL_PREFIX=$HOME/.local`) to prevent collisions with Fedora's `plasma-workspace` RPM packages.
+- Do not install to `/usr` or run `cmake --install`. Do not install to the system; run directly from the build directory.
 - Do not change the configuration filename (`klipperrc`) or schema.
 - Do not modify or replace the SQLite database schema (`history3.sqlite` version 3 with WAL mode) or binary storage format in `data/`.
 - Do not change the public D-Bus interface. The service must remain `org.kde.klipper` at object `/klipper`.
@@ -47,7 +47,7 @@ The application runs without `plasmashell`, uses its own lifecycle, and preserve
 - `klipper/declarative/`: The `org.klipboard.private.clipboard` QML plugin and popup components (`KlipperPopup.qml`, `ClipboardMenu.qml`, `BarcodePage.qml`).
 - `packaging/autostart/org.kde.klipboard.desktop`: XDG autostart desktop entry template.
 
-## Build and installation
+## Build and testing
 
 Install missing development headers if building on a clean system:
 
@@ -60,13 +60,12 @@ sudo dnf install \
   qt6-qtbase-private-devel
 ```
 
-Configure, build, test, and install:
+Configure, build, and test:
 
 ```bash
-cmake -B build -G Ninja -DCMAKE_INSTALL_PREFIX="$HOME/.local" -DBUILD_TESTING=ON
+cmake -B build -G Ninja -DBUILD_TESTING=ON
 cmake --build build
 ctest --test-dir build --output-on-failure -R "klipper-testHistoryCycler|klipper-testHistoryModel|klipper-testUtils"
-cmake --install build
 ```
 
 ## Running Klipboard
@@ -77,13 +76,7 @@ Stop CopyQ if running:
 copyq exit
 ```
 
-Run the installed binary:
-
-```bash
-~/.local/bin/klipboard &
-```
-
-Or run directly from the build tree without installing:
+Run directly from the build tree:
 
 ```bash
 QML_IMPORT_PATH="$PWD/build/bin" ./build/bin/klipboard
@@ -97,7 +90,3 @@ QML_IMPORT_PATH="$PWD/build/bin" ./build/bin/klipboard
 - History database: `~/.local/share/klipper/history3.sqlite`
 - Binary clipboard storage: `~/.local/share/klipper/data/`
 - Shortcut configuration: `~/.config/kglobalshortcutsrc` under `[plasmashell]`
-- Desktop entry: `~/.local/share/applications/org.kde.klipboard.desktop`
-- Installed binary: `~/.local/bin/klipboard`
-- Installed shared library: `~/.local/lib64/libklipboard.so*`
-- Installed QML module: `~/.local/lib64/qml/org/klipboard/private/clipboard/`
