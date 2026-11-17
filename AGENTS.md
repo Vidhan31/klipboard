@@ -2,7 +2,7 @@
 
 ## Objective
 
-This repository contains Klipboard, an independent application based on KDE Klipper v6.8.2 extracted from `plasma-workspace`. Klipboard has no affiliation with the KDE project.
+This repository contains Klipboard, an independent application based on KDE Klipper v6.8.3 extracted from `plasma-workspace`. Klipboard has no affiliation with the KDE project.
 
 The application runs without `plasmashell`, uses its own lifecycle, and preserves user data, configuration, shortcut bindings, and D-Bus interfaces.
 
@@ -12,7 +12,7 @@ The application runs without `plasmashell`, uses its own lifecycle, and preserve
 - Desktop environment: KDE Plasma 6.8 on Wayland.
 - Desktop panel: Quickshell (`quickshell.service`), not `plasmashell`.
 - `plasmashell` is permanently masked (`plasma-plasmashell.service -> /dev/null`). Never enable or start it.
-- Upstream reference source: `https://github.com/KDE/plasma-workspace` tag `v6.8.2`.
+- Upstream reference source: `https://github.com/KDE/plasma-workspace` tag `v6.8.3`.
 
 ## Rules
 

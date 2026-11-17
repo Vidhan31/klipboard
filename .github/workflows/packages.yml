@@ -62,7 +62,8 @@ jobs:
       - name: Build rpm
         run: |
           mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-          tar --sort=name --mtime='@0' --owner=0 --group=0 --numeric-owner --exclude=./rpmbuild --transform='s,^\./,klipboard-6.8.2/,' -czf rpmbuild/SOURCES/klipboard-6.8.2.tar.gz .
+          VERSION=$(tr -d ' \n\r' < VERSION)
+          tar --sort=name --mtime='@0' --owner=0 --group=0 --numeric-owner --exclude=./.git --exclude=./build --exclude=./rpmbuild --transform="s,^\./,klipboard-${VERSION}/," -czf "rpmbuild/SOURCES/klipboard-${VERSION}.tar.gz" .
           rpmbuild --define "_topdir $PWD/rpmbuild" -bb packaging/rpm/klipboard.spec
           for rpm in rpmbuild/RPMS/*/*.rpm; do cp "$rpm" .; done
       - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08
@@ -83,8 +84,12 @@ jobs:
           pacman -Syu --noconfirm --needed git sudo cmake ninja extra-cmake-modules qt6-base qt6-declarative qt6-wayland qt6-tools plasma-wayland-protocols libei libxcb xcb-util zlib ki18n kconfig kcoreaddons kdbusaddons kglobalaccel kguiaddons kiconthemes kio knotifications prison kservice kstatusnotifieritem kwidgetsaddons kwindowsystem kxmlgui libplasma
           useradd -m builder
           printf 'builder ALL=(ALL) NOPASSWD: ALL\n' >> /etc/sudoers
-          cp -a "$GITHUB_WORKSPACE" /tmp/klipboard
-          cp /tmp/klipboard/packaging/arch/PKGBUILD /tmp/klipboard/PKGBUILD
+          VERSION=$(tr -d ' \n\r' < VERSION)
+          mkdir -p /tmp/klipboard
+          cp packaging/arch/PKGBUILD /tmp/klipboard/PKGBUILD
+          tar --sort=name --mtime='@0' --owner=0 --group=0 --numeric-owner --exclude=./.git --exclude=./build --exclude=./rpmbuild --transform="s,^\./,klipboard-${VERSION}/," -czf "/tmp/klipboard/klipboard-${VERSION}.tar.gz" .
+          SHA256=$(sha256sum "/tmp/klipboard/klipboard-${VERSION}.tar.gz" | awk '{print $1}')
+          sed -i "s/sha256sums=.*/sha256sums=('${SHA256}')/" /tmp/klipboard/PKGBUILD
           chown -R builder:builder /tmp/klipboard
           cd /tmp/klipboard
           su builder -c 'makepkg --noconfirm'

@@ -1,5 +1,5 @@
 Name:           klipboard
-Version:        6.8.2
+Version:        6.8.3
 Release:        1%{?dist}
 Summary:        Standalone clipboard manager based on KDE Klipper
 License:        GPL-2.0-or-later AND BSD-3-Clause

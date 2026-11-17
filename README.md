@@ -60,6 +60,10 @@ Klipboard reuses Klipper's files in place. You do not need to export or import y
 
 Klipboard reads your existing settings and history from these locations. It does not create a separate history database.
 
+## Upstream tracking
+
+Klipboard stays as close to official Klipper as possible. The codebase syncs with official Klipper only when new Plasma releases occur, keeping the code as close to upstream as possible.
+
 ## Requirements
 
 Klipboard requires a KDE Plasma 6.8.x Wayland session. Building it requires:
